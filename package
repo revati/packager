@@ -1,0 +1,20 @@
+#! /usr/bin/env php
+
+<?php
+
+use Package\Commands\AddPackageTypeCommand;
+use Package\Commands\SetupCommand;
+use Package\Commands\NewPackageCommand;
+use Package\Commands\ShowTypesListCommand;
+use Symfony\Component\Console\Application;
+
+require 'vendor/autoload.php';
+
+$app = new Application( "Package development wrapper", "0.0" );
+
+$app->add( new SetupCommand() );
+$app->add( new NewPackageCommand() );
+$app->add( new AddPackageTypeCommand() );
+$app->add( new ShowTypesListCommand() );
+
+$app->run();
