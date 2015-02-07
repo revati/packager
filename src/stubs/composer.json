@@ -1,8 +1,0 @@
-{
-  "name": "{packageName}",
-  "description": "{packageDescription}",
-  "require": {},
-  "autoload": {
-    "{packageName}\\": "src/"
-  }
-}

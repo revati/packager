@@ -1,24 +1,25 @@
-<?php namespace Packager\Commands;
+<?php namespace Packager\Commands\Bootstrap;
 
+use Packager\Commands\BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShowTypesListCommand extends BaseCommand {
+class ShowBootstrapsListCommand extends BaseCommand {
 
 	public function configure()
 	{
-		$this->setName( 'type:all' )->setDescription( 'Show package types list' );
+		$this->setName( 'bootstrap:all' )->setDescription( 'Show bootstraps list' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
 		$this->prepare( $input, $output );
 
-		$types = $this->config->get( 'types' );
+		$bootstraps = $this->config->getBootstrap();
 
-		if( empty( $types ) )
+		if( empty( $bootstraps ) )
 		{
-			$output->writeln( "No package types has been configured" );
+			$output->writeln( "No bootstraps has been configured" );
 			return;
 		}
 
@@ -26,12 +27,11 @@ class ShowTypesListCommand extends BaseCommand {
 
 		$table->setHeaders( [ "Name", "Source" ] );
 
-		foreach( $types as $name => $source )
+		foreach( $bootstraps as $name => $source )
 		{
 			$table->addRow( [ $name, $source ] );
 		}
 
 		$table->render( $output );
 	}
-
 }

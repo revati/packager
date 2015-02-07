@@ -1,8 +1,5 @@
 {
-    "author": "r",
-    "types": {
-        "laravel": "laravel",
-        "laravel2": "laravel",
-        "package": "new2"
-    }
+    "author": "",
+    "defaultBootstrap": "",
+    "bootstraps": []
 }

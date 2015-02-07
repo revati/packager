@@ -10,36 +10,59 @@ class Config {
 	{
 		$this->output = $output;
 
-		$this->get();
+		$this->config = $this->getConfigFileContents();
 	}
 
-	public function set( $field, $value )
+	public function getAuthor()
 	{
-		$this->config[ $field ] = $value;
+		return $this->config[ 'author' ];
+	}
+
+	public function setAuthor( $author )
+	{
+		$this->config[ 'author' ] = $author;
 
 		return $this;
 	}
 
-	public function get( $field = null )
+	public function getBootstrap( $name = null )
 	{
-		if( is_null( $this->config ) )
+		if( is_null( $name ) )
 		{
-			$this->config = $this->getConfigFileContents();
+			return $this->config[ 'bootstraps' ];
 		}
 
-		if( ! $field )
+		if( ! $this->hasBootstrap( $name ) )
 		{
-			return $this->config;
+			$this->output->writeln( "<error>Unexisting bootstrap {$name}</error>" );
+			exit( 1 );
 		}
 
-		if( array_key_exists( $field, $this->config ) )
-		{
-			return $this->config[ $field ];
-		}
+		return $this->config[ 'bootstraps' ][ $name ];
+	}
 
-		$message = 'Trying to fetch unexisting config property: ' . $field;
-		$this->output->writeln( "<error>{$message}</error>" );
-		exit( 1 );
+	public function hasBootstrap( $name )
+	{
+		return array_key_exists( $name, $this->config[ 'bootstraps' ] );
+	}
+
+	public function setBootstrap( $name, $source )
+	{
+		$this->config[ 'bootstraps' ][ $name ] = $source;
+
+		return $this;
+	}
+
+	public function getDefaultBootstrap()
+	{
+		return $this->config[ 'defaultBootstrap' ];
+	}
+
+	public function setDefaultBootstrap( $name )
+	{
+		$this->config[ 'defaultBootstrap' ] = $name;
+
+		return $this;
 	}
 
 	public function save()
@@ -70,7 +93,7 @@ class Config {
 			exit( 1 );
 		}
 
-		$config[ 'types' ] = (array) $config[ 'types' ];
+		$config[ 'bootstraps' ] = (array) $config[ 'bootstraps' ];
 
 		return $config;
 	}

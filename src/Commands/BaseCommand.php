@@ -5,6 +5,8 @@ use Packager\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 class BaseCommand extends Command {
 
@@ -23,12 +25,24 @@ class BaseCommand extends Command {
 	 */
 	protected $config;
 
+	/**
+	 * @type \Symfony\Component\Finder\Finder
+	 */
+	protected $finder;
+
+	/**
+	 * @type \Symfony\Component\Filesystem\Filesystem
+	 */
+	protected $fs;
+
 	protected function prepare( InputInterface $input, OutputInterface $output )
 	{
 		$this->input  = $input;
 		$this->output = $output;
 
 		$this->config = new Config( $output );
+		$this->finder = new Finder();
+		$this->fs = new Filesystem();
 	}
 
 	protected function ask( $message, Closure $validation = null )
@@ -63,5 +77,10 @@ class BaseCommand extends Command {
 	protected function write( $message, $tag )
 	{
 		$this->output->writeln( "<$tag>$message</$tag>" );
+	}
+
+	protected function isAbsolutePath( $path )
+	{
+		return $this->fs->isAbsolutePath( $path );
 	}
 }

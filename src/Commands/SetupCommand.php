@@ -18,7 +18,7 @@ class SetupCommand extends BaseCommand {
 
 		$author = $this->askAuthorName();
 
-		$this->config->set( 'author', $author )->save();
+		$this->config->setAuthor( $author )->save();
 
 		$this->writeInfo( 'Default author set to ' . $author );
 
@@ -45,8 +45,8 @@ class SetupCommand extends BaseCommand {
 
 	protected function showModesTable()
 	{
-		$command = $this->getApplication()->find( 'type:all' );
+		$command = $this->getApplication()->find( 'bootstrap:all' );
 
-		return $command->run( new ArrayInput( [ 'command' => 'type:all' ] ), $this->output );
+		return $command->run( new ArrayInput( [ 'command' => 'bootstrap:all' ] ), $this->output );
 	}
 }
