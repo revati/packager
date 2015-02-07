@@ -1,6 +1,5 @@
-<?php namespace Packager\Commands\Bootstrap;
+<?php namespace Packager;
 
-use Packager\Commands\BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,7 +18,7 @@ class FetchBootstrapConfigCommand extends BaseCommand {
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
-		$this->prepare( $input, $output );
+		parent::execute( $input, $output );
 
 		$name   = $input->getArgument( 'name' );
 		$source = $input->getArgument( 'source' );
