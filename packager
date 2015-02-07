@@ -2,10 +2,10 @@
 
 <?php
 
-use Package\Commands\AddPackageTypeCommand;
-use Package\Commands\SetupCommand;
-use Package\Commands\NewPackageCommand;
-use Package\Commands\ShowTypesListCommand;
+use Packager\Commands\AddPackageTypeCommand;
+use Packager\Commands\SetupCommand;
+use Packager\Commands\NewPackageCommand;
+use Packager\Commands\ShowTypesListCommand;
 use Symfony\Component\Console\Application;
 
 require 'vendor/autoload.php';

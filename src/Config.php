@@ -1,4 +1,4 @@
-<?php namespace Package\Commands;
+<?php namespace Packager;
 
 class Config {
 

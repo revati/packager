@@ -1,16 +1,11 @@
-<?php namespace Package\Commands;
+<?php namespace Packager\Commands;
 
 use Exception;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SetupCommand extends Command {
-
-	protected $input;
-
-	protected $output;
+class SetupCommand extends BaseCommand {
 
 	public function configure()
 	{
@@ -19,27 +14,20 @@ class SetupCommand extends Command {
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
-		$this->input  = $input;
-		$this->output = $output;
+		$this->prepare( $input, $output );
 
-		$config = new Config( $output );
+		$author = $this->askAuthorName();
 
-		$author = $this->fetchAuthorName();
+		$this->config->set( 'author', $author )->save();
 
-		$config->set( 'author', $author )->save();
-
-		$message = 'Default author set to ' . $author;
-		$output->writeln( "<info>{$message}</info>" );
+		$this->writeInfo( 'Default author set to ' . $author );
 
 		$this->showModesTable();
 	}
 
-	protected function fetchAuthorName()
+	protected function askAuthorName()
 	{
-		$message = '<question>Please set author name:</question> ';
-
-		return $this->getHelper( 'dialog' )
-		            ->askAndValidate( $this->output, $message, $this->authorNameValidator() );
+		return $this->ask( 'Provide author name', $this->authorNameValidator() );
 	}
 
 	protected function authorNameValidator()

@@ -1,10 +1,9 @@
-<?php namespace Package\Commands;
+<?php namespace Packager\Commands;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShowTypesListCommand extends Command {
+class ShowTypesListCommand extends BaseCommand {
 
 	public function configure()
 	{
@@ -13,10 +12,9 @@ class ShowTypesListCommand extends Command {
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
-		$config = new Config( $output );
+		$this->prepare( $input, $output );
 
-		echo print_r( $config->get(), 1 );
-		$types = $config->get( 'types' );
+		$types = $this->config->get( 'types' );
 
 		if( empty( $types ) )
 		{

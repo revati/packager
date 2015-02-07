@@ -1,12 +1,11 @@
-<?php namespace Package\Commands;
+<?php namespace Packager\Commands;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AddPackageTypeCommand extends Command {
+class AddPackageTypeCommand extends BaseCommand {
 
 	public function configure()
 	{
@@ -19,19 +18,19 @@ class AddPackageTypeCommand extends Command {
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
-		$config = new Config( $output );
-		$types  = $config->get( 'types' );
+		$this->prepare( $input, $output );
 
+		$types      = $this->config->get( 'types' );
 		$typeName   = $input->getArgument( 'name' );
 		$typeSource = $input->getArgument( 'source' );
 
 		if(
 			array_key_exists( $typeName, $types )
 			&&
-		    ! $input->getOption('force')
+			! $input->getOption( 'force' )
 		)
 		{
-			$output->writeln( '<error>Package type already exists!</error> Use --force to overwrite' );
+			$this->writeError( 'Package type already exists!' );
 			exit( 1 );
 		}
 
@@ -41,11 +40,12 @@ class AddPackageTypeCommand extends Command {
 		{
 			$message = "Packages type '$typeName' overwritten with new source '$typeSource'";
 		}
+
 		$types[ $typeName ] = $typeSource;
 
-		$config->set( 'types', $types )->save();
+		$this->config->set( 'types', $types )->save();
 
-		$output->writeln( "<info>{$message}</info>" );
+		$this->writeInfo( $message );
 	}
 
 }
