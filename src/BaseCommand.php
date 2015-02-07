@@ -1,4 +1,4 @@
-<?php namespace Packager\Commands;
+<?php namespace Packager;
 
 use Closure;
 use Packager\Config;
@@ -35,7 +35,7 @@ class BaseCommand extends Command {
 	 */
 	protected $fs;
 
-	protected function prepare( InputInterface $input, OutputInterface $output )
+	protected function execute( InputInterface $input, OutputInterface $output )
 	{
 		$this->input  = $input;
 		$this->output = $output;
@@ -72,6 +72,11 @@ class BaseCommand extends Command {
 	protected function writeError( $message )
 	{
 		$this->write( $message, 'error' );
+	}
+
+	protected function writeComment( $message )
+	{
+		$this->write( $message, 'comment' );
 	}
 
 	protected function write( $message, $tag )

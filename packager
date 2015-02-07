@@ -5,25 +5,48 @@
 use Packager\Commands\Bootstrap\FetchBootstrapConfigCommand;
 use Packager\Commands\Bootstrap\MakeBootstrapConfigCommand;
 use Packager\Commands\Bootstrap\ShowBootstrapsListCommand;
-use Packager\Commands\SetupCommand;
+use Packager\InitPackagerCommand;
 use Packager\Commands\NewPackageCommand;
+use Packager\Commands\SetupCommand;
 use Symfony\Component\Console\Application;
 
-if (file_exists(__DIR__.'/vendor/autoload.php'))
+$_ENV[ 'HOME' ] = getenv( 'HOME' );
+$_ENV[ 'PACKAGER_DOTFILE_PATH' ] = config_path() . DIRECTORY_SEPARATOR . '.config';
+
+if( file_exists( __DIR__ . '/vendor/autoload.php' ) )
 {
-	require __DIR__.'/vendor/autoload.php';
+	require __DIR__ . '/vendor/autoload.php';
 }
 else
 {
-	require __DIR__.'/../../autoload.php';
+	require __DIR__ . '/../../autoload.php';
+}
+
+function config_path()
+{
+	if( isset( $_SERVER[ 'HOME' ] ) )
+	{
+		return $_SERVER[ 'HOME' ] . '/.Packager';
+	}
+	else
+	{
+		return $_SERVER[ 'HOMEDRIVE' ] . $_SERVER[ 'HOMEPATH' ] . DIRECTORY_SEPARATOR . '.Packager';
+	}
+}
+
+function cache_path()
+{
+	return config_path() . DIRECTORY_SEPARATOR . 'bootstraps';
 }
 
 $app = new Application( "Package development wrapper", "0.0" );
 
-$app->add( new SetupCommand() );
-$app->add( new NewPackageCommand() );
-$app->add( new FetchBootstrapConfigCommand() );
-$app->add( new MakeBootstrapConfigCommand() );
-$app->add( new ShowBootstrapsListCommand() );
+$app->add( new InitPackagerCommand() );
+//$app->add( new SetupCommand() );
+//$app->add( new NewPackageCommand() );
+//$app->add( new FetchBootstrapConfigCommand() );
+//$app->add( new MakeBootstrapConfigCommand() );
+//$app->add( new ShowBootstrapsListCommand() );
+
 
 $app->run();
