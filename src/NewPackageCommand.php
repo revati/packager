@@ -29,14 +29,14 @@ class NewPackageCommand extends BaseCommand {
 
 	protected function getPackageSource()
 	{
-		$bootstrapName = $this->input->getArgument( 'type' );
+		$templateName = $this->input->getArgument( 'type' );
 
-		if( ! $bootstrapName )
+		if( ! $templateName )
 		{
-			$bootstrapName = $this->config->getDefaultBootstrap();
+			$templateName = $this->config->getDefaultTemplate();
 		}
 
-		return $this->config->getBootstrap( $bootstrapName );
+		return $this->config->getTemplate( $templateName );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class NewPackageCommand extends BaseCommand {
 
 	protected function initPackage( $directory, $source )
 	{
-		$config = $this->getBootstrapConfig( $source );
+		$config = $this->getTemplateConfig( $source );
 
 		mkdir( $directory );
 
@@ -72,13 +72,13 @@ class NewPackageCommand extends BaseCommand {
 		}
 	}
 
-	protected function getBootstrapConfig( $source )
+	protected function getTemplateConfig( $source )
 	{
 		$config = @file_get_contents( $source );
 
 		if( $config === false )
 		{
-			throw new Exception( 'Package bootstrap config is missing' );
+			throw new Exception( 'Package template config is missing' );
 		}
 
 		$config = strtr( $config, $this->collectReplaceData() );

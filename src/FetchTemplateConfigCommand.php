@@ -6,15 +6,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FetchBootstrapConfigCommand extends BaseCommand {
+class FetchTemplateConfigCommand extends BaseCommand {
 
 	public function configure()
 	{
-		$this->setName( 'bootstrap:fetch' )
-		     ->setDescription( 'Fetch package bootstrap config file' )
-		     ->addArgument( 'name', InputArgument::REQUIRED, 'Bootstrap name' )
-		     ->addArgument( 'source', InputArgument::REQUIRED, 'Bootstrap source' )
-		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages bootstrap if exists' );
+		$this->setName( 'template:fetch' )
+		     ->setDescription( 'Fetch package template config file' )
+		     ->addArgument( 'name', InputArgument::REQUIRED, 'Template name' )
+		     ->addArgument( 'source', InputArgument::REQUIRED, 'Template source' )
+		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages template if exists' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
@@ -25,24 +25,24 @@ class FetchBootstrapConfigCommand extends BaseCommand {
 		$source = $input->getArgument( 'source' );
 
 		if(
-			$this->config->hasBootstrap( $name )
+			$this->config->hasTemplate( $name )
 			&&
 			! $input->getOption( 'force' )
 		)
 		{
-			throw new Exception( 'Bootstrap already exists!' );
+			throw new Exception( 'Template already exists!' );
 		}
 
-		$message = "New bootstrap '$name' with '$source' source added";
+		$message = "New template '$name' with '$source' source added";
 
-		if( $this->config->hasBootstrap( $name ) )
+		if( $this->config->hasTemplate( $name ) )
 		{
-			$message = "Bootstrap '$name' overwritten with new source '$source'";
+			$message = "Template '$name' overwritten with new source '$source'";
 		}
 
 		$source = $this->verifySource( $source );
 
-		$this->config->setBootstrap( $name, $source )->save();
+		$this->config->setTemplate( $name, $source )->save();
 
 		$this->writeInfo( $message );
 	}

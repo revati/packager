@@ -27,41 +27,41 @@ class Config {
 		return $this;
 	}
 
-	public function getBootstrap( $name = null )
+	public function getTemplate( $name = null )
 	{
 		if( is_null( $name ) )
 		{
-			return $this->config[ 'bootstraps' ];
+			return $this->config[ 'templates' ];
 		}
 
-		if( ! $this->hasBootstrap( $name ) )
+		if( ! $this->hasTemplate( $name ) )
 		{
-			throw new Exception( 'Unexisting bootstrap ' . $name );
+			throw new Exception( 'Unexisting template ' . $name );
 		}
 
-		return $this->config[ 'bootstraps' ][ $name ];
+		return $this->config[ 'templates' ][ $name ];
 	}
 
-	public function hasBootstrap( $name )
+	public function hasTemplate( $name )
 	{
-		return array_key_exists( $name, $this->config[ 'bootstraps' ] );
+		return array_key_exists( $name, $this->config[ 'templates' ] );
 	}
 
-	public function setBootstrap( $name, $source )
+	public function setTemplate( $name, $source )
 	{
-		$this->config[ 'bootstraps' ][ $name ] = $source;
+		$this->config[ 'templates' ][ $name ] = $source;
 
 		return $this;
 	}
 
-	public function getDefaultBootstrap()
+	public function getDefaultTemplate()
 	{
-		return $this->config[ 'defaultBootstrap' ];
+		return $this->config[ 'defaultTemplate' ];
 	}
 
-	public function setDefaultBootstrap( $name )
+	public function setDefaultTemplate( $name )
 	{
-		$this->config[ 'defaultBootstrap' ] = $name;
+		$this->config[ 'defaultTemplate' ] = $name;
 
 		return $this;
 	}
@@ -92,7 +92,7 @@ class Config {
 			throw new Exception( 'Config file is corrupt' );
 		}
 
-		$config[ 'bootstraps' ] = (array) $config[ 'bootstraps' ];
+		$config[ 'templates' ] = (array) $config[ 'templates' ];
 
 		return $config;
 	}

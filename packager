@@ -2,12 +2,12 @@
 
 <?php
 
-use Packager\FetchBootstrapConfigCommand;
+use Packager\FetchTemplateConfigCommand;
 use Packager\InitPackagerCommand;
-use Packager\MakeBootstrapConfigCommand;
+use Packager\MakeTemplateConfigCommand;
 use Packager\NewPackageCommand;
 use Packager\SetAuthorCommand;
-use Packager\ShowBootstrapsListCommand;
+use Packager\ShowTemplatesListCommand;
 use Symfony\Component\Console\Application;
 
 $_ENV[ 'HOME' ] = getenv( 'HOME' );
@@ -36,7 +36,7 @@ function config_path()
 
 function cache_path()
 {
-	return config_path() . DIRECTORY_SEPARATOR . 'bootstraps';
+	return config_path() . DIRECTORY_SEPARATOR . 'templates';
 }
 
 $app = new Application( "Package development wrapper", "0.0" );
@@ -44,9 +44,9 @@ $app = new Application( "Package development wrapper", "0.0" );
 $app->add( new InitPackagerCommand() );
 $app->add( new SetAuthorCommand() );
 $app->add( new NewPackageCommand() );
-$app->add( new FetchBootstrapConfigCommand() );
-$app->add( new MakeBootstrapConfigCommand() );
-$app->add( new ShowBootstrapsListCommand() );
+$app->add( new FetchTemplateConfigCommand() );
+$app->add( new MakeTemplateConfigCommand() );
+$app->add( new ShowTemplatesListCommand() );
 
 
 $app->run();

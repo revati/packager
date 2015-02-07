@@ -1,7 +1,7 @@
 {
   "name": "revati/packager",
   "version": "0.1",
-  "description": "Composer package builder bootstrap",
+  "description": "Composer package builder template",
   "license": "MIT",
   "authors": [
     {

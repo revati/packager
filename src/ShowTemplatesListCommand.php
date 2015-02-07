@@ -3,22 +3,22 @@
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShowBootstrapsListCommand extends BaseCommand {
+class ShowTemplatesListCommand extends BaseCommand {
 
 	public function configure()
 	{
-		$this->setName( 'bootstrap:all' )->setDescription( 'Show bootstraps list' );
+		$this->setName( 'template:all' )->setDescription( 'Show templates list' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
 		parent::execute( $input, $output );
 
-		$bootstraps = $this->config->getBootstrap();
+		$templates = $this->config->getTemplate();
 
-		if( empty( $bootstraps ) )
+		if( empty( $templates ) )
 		{
-			$output->writeln( "No bootstraps has been configured" );
+			$output->writeln( "No templates has been configured" );
 			return;
 		}
 
@@ -26,7 +26,7 @@ class ShowBootstrapsListCommand extends BaseCommand {
 
 		$table->setHeaders( [ "Name", "Source" ] );
 
-		foreach( $bootstraps as $name => $source )
+		foreach( $templates as $name => $source )
 		{
 			$table->addRow( [ $name, $source ] );
 		}

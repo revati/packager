@@ -1,6 +1,6 @@
 # Packager
 
-This package provides bootstrap for creating packages. 
+This package provides template for creating packages. 
 
 ## Installation
 

@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
-class MakeBootstrapConfigCommand extends BaseCommand {
+class MakeTemplateConfigCommand extends BaseCommand {
 
 	protected $newConfig
 		                   = [
@@ -21,12 +21,12 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 
 	public function configure()
 	{
-		$this->setName( 'bootstrap:make' )
-		     ->setDescription( 'Make package bootstrap config file from folder' )
-		     ->addArgument( 'name', InputArgument::REQUIRED, 'Bootstrap name' )
-		     ->addArgument( 'source', InputArgument::OPTIONAL, 'Bootstrap source' )
-		     ->addOption( 'description', 'd', InputOption::VALUE_OPTIONAL, 'Bootstrap description' )
-		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages bootstrap if exists' );
+		$this->setName( 'template:make' )
+		     ->setDescription( 'Make package template config file from folder' )
+		     ->addArgument( 'name', InputArgument::REQUIRED, 'Template name' )
+		     ->addArgument( 'source', InputArgument::OPTIONAL, 'Template source' )
+		     ->addOption( 'description', 'd', InputOption::VALUE_OPTIONAL, 'Template description' )
+		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages template if exists' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
@@ -37,21 +37,21 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 		$source = $this->input->getArgument( 'source' );
 
 		if(
-			$this->config->hasBootstrap( $name )
+			$this->config->hasTemplate( $name )
 			&&
 			! $input->getOption( 'force' )
 		)
 		{
-			throw new Exception( 'Bootstrap already exists!' );
+			throw new Exception( 'Template already exists!' );
 		}
 
 		$this->prepareConfig( $this->getAbsolutePath( $source ) );
 
 		$this->saveConfig();
 
-		$this->config->setBootstrap( $name, $this->getBootstrapPath() )->save();
+		$this->config->setTemplate( $name, $this->getTemplatePath() )->save();
 
-		$this->writeInfo( "Bootstrap config generated as '{$name}'" );
+		$this->writeInfo( "Template config generated as '{$name}'" );
 	}
 
 	protected function prepareConfig( $directory )
@@ -72,10 +72,10 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 
 	protected function saveConfig()
 	{
-		file_put_contents( $this->getBootstrapPath(), json_encode( $this->newConfig, JSON_PRETTY_PRINT ) );
+		file_put_contents( $this->getTemplatePath(), json_encode( $this->newConfig, JSON_PRETTY_PRINT ) );
 	}
 
-	protected function getBootstrapPath()
+	protected function getTemplatePath()
 	{
 		$name = $this->input->getArgument( 'name' ) . '.json';
 
