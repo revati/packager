@@ -4,6 +4,7 @@
 
 use Packager\InitPackagerCommand;
 use Packager\SetAuthorCommand;
+use Packager\ShowBootstrapsListCommand;
 use Symfony\Component\Console\Application;
 
 $_ENV[ 'HOME' ] = getenv( 'HOME' );
@@ -43,7 +44,7 @@ $app->add( new SetAuthorCommand() );
 //$app->add( new NewPackageCommand() );
 //$app->add( new FetchBootstrapConfigCommand() );
 //$app->add( new MakeBootstrapConfigCommand() );
-//$app->add( new ShowBootstrapsListCommand() );
+$app->add( new ShowBootstrapsListCommand() );
 
 
 $app->run();

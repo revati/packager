@@ -1,6 +1,5 @@
-<?php namespace Packager\Commands\Bootstrap;
+<?php namespace Packager;
 
-use Packager\Commands\BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -13,7 +12,7 @@ class ShowBootstrapsListCommand extends BaseCommand {
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
-		$this->prepare( $input, $output );
+		parent::execute( $input, $output );
 
 		$bootstraps = $this->config->getBootstrap();
 
