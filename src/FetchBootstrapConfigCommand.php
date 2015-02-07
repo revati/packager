@@ -1,5 +1,6 @@
 <?php namespace Packager;
 
+use Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,8 +30,7 @@ class FetchBootstrapConfigCommand extends BaseCommand {
 			! $input->getOption( 'force' )
 		)
 		{
-			$this->writeError( 'Bootstrap already exists!' );
-			exit( 1 );
+			throw new Exception( 'Bootstrap already exists!' );
 		}
 
 		$message = "New bootstrap '$name' with '$source' source added";

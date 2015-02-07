@@ -103,4 +103,19 @@ class BaseCommand extends Command {
 
 		return $command->run( new ArrayInput( $arguments ), $this->output );
 	}
+
+	protected function getAbsolutePath( $path )
+	{
+		if( is_null( $path ) )
+		{
+			return getcwd();
+		}
+
+		if( $this->isAbsolutePath( $path ) )
+		{
+			return $path;
+		}
+
+		return getcwd() . '/' . $pathy;
+	}
 }

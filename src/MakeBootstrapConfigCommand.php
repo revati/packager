@@ -33,7 +33,8 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 	{
 		parent::execute( $input, $output );
 
-		$name = $this->input->getArgument( 'name' );
+		$name   = $this->input->getArgument( 'name' );
+		$source = $this->input->getArgument( 'source' );
 
 		if(
 			$this->config->hasBootstrap( $name )
@@ -44,7 +45,7 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 			throw new Exception( 'Bootstrap already exists!' );
 		}
 
-		$this->prepareConfig( $this->fetchDirectory() );
+		$this->prepareConfig( $this->getAbsolutePath( $source ) );
 
 		$this->saveConfig();
 
@@ -95,22 +96,5 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 		$fileContents = file_get_contents( $file->getRealPath() );
 
 		$this->newConfig[ 'files' ][ $filePath ] = $fileContents;
-	}
-
-	protected function fetchDirectory()
-	{
-		$directory = $this->input->getArgument( 'source' );
-
-		if( is_null( $directory ) )
-		{
-			return getcwd();
-		}
-
-		if( $this->isAbsolutePath( $directory ) )
-		{
-			return $directory;
-		}
-
-		return getcwd() . '/' . $directory;
 	}
 }

@@ -5,7 +5,7 @@
 use Packager\FetchBootstrapConfigCommand;
 use Packager\InitPackagerCommand;
 use Packager\MakeBootstrapConfigCommand;
-//use Packager\NewPackageCommand;
+use Packager\NewPackageCommand;
 use Packager\SetAuthorCommand;
 use Packager\ShowBootstrapsListCommand;
 use Symfony\Component\Console\Application;
@@ -43,7 +43,7 @@ $app = new Application( "Package development wrapper", "0.0" );
 
 $app->add( new InitPackagerCommand() );
 $app->add( new SetAuthorCommand() );
-//$app->add( new NewPackageCommand() );
+$app->add( new NewPackageCommand() );
 $app->add( new FetchBootstrapConfigCommand() );
 $app->add( new MakeBootstrapConfigCommand() );
 $app->add( new ShowBootstrapsListCommand() );
