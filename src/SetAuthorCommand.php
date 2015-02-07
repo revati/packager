@@ -16,7 +16,8 @@ class SetAuthorCommand extends BaseCommand {
 	{
 		$this->setName( 'author' )
 		     ->setDescription( 'Setup author' )
-		     ->addArgument( 'name', InputArgument::OPTIONAL, 'Author name' );
+		     ->addArgument( 'name', InputArgument::OPTIONAL, 'Author name' )
+		     ->addArgument( 'email', InputArgument::OPTIONAL, 'Author email' );
 	}
 
 	/**
@@ -31,34 +32,71 @@ class SetAuthorCommand extends BaseCommand {
 	{
 		parent::execute( $input, $output );
 
-		$author = $input->getArgument( 'name' );
+		$name  = $input->getArgument( 'name' );
+		$email = $input->getArgument( 'email' );
 
-		if( is_null( $author ) )
+		if( is_null( $name ) )
 		{
-			$author = $this->askAuthorName();
+			$name = $this->askAuthorName();
 		}
 
-		$this->config->setAuthor( $author )->save();
+		if( is_null( $email ) )
+		{
+			$email = $this->askAuthorEmail();
+		}
+		elseif( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) )
+		{
+			$this->writeError( 'Author email must be valid email' );
 
-		$this->writeInfo( 'Default author set to ' . $author );
+			$email = $this->askAuthorEmail();
+		}
+
+		$this->config
+			->setAuthorName( $name )
+			->setAuthorEmail( $email )
+			->save();
+
+		$this->writeInfo( 'Default author set to ' . $name . ' with ' . $email . ' email' );
 	}
 
 	protected function askAuthorName()
 	{
-		return $this->ask( 'Provide author name', $this->authorNameValidator() );
+		return $this->ask( 'Provide author  name', $this->authorNameValidator() );
+	}
+
+	protected function askAuthorEmail()
+	{
+		return $this->ask( 'Provide author email', $this->authorEmailValidator() );
 	}
 
 	protected function authorNameValidator()
 	{
-		return function ( $answer )
+		return function ( $authorName )
 		{
-			if( empty( $answer ) )
+			if( empty( $authorName ) )
 			{
-				throw new Exception( "Author name must be provided" );
+				throw new Exception( 'Author name must be provided' );
 			}
 
-			return $answer;
+			return $authorName;
 		};
 	}
 
+	protected function authorEmailValidator()
+	{
+		return function ( $authorEmail )
+		{
+			if( empty( $authorEmail ) )
+			{
+				throw new Exception( 'Author email must be provided' );
+			}
+
+			if( ! filter_var( $authorEmail, FILTER_VALIDATE_EMAIL ) )
+			{
+				throw new Exception( 'Author email must be valid email' );
+			}
+
+			return $authorEmail;
+		};
+	}
 }

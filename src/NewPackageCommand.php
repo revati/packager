@@ -89,18 +89,19 @@ class NewPackageCommand extends BaseCommand {
 	protected function collectReplaceData()
 	{
 		$packageName   = $this->input->getArgument( 'name' );
-		$packageAuthor = $this->config->getAuthor();
+		$packageAuthor = $this->config->getAuthorName();
 
 		return [
-			'__package_author__'      => $packageAuthor,
+			'__author_name__'         => $packageAuthor,
+			'__author_email__'        => $this->config->getAuthorEmail(),
 			'__package_name__'        => $packageName,
 			'__package_description__' => $this->input->getOption( 'description' ),
-			'__package_class__'       => $this->getPackageRootClass( $packageName ),
-			'__authorClass__'         => $this->getPackageRootClass( $packageAuthor ),
+			'__package_class__'       => $this->getClassFromString( $packageName ),
+			'__author_class__'        => $this->getClassFromString( $packageAuthor ),
 		];
 	}
 
-	protected function getPackageRootClass( $packageName )
+	protected function getClassFromString( $packageName )
 	{
 		$words = strtr( $packageName, [ '-' => ' ', '_' => ' ' ] );
 

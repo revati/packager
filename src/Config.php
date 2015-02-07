@@ -15,14 +15,26 @@ class Config {
 		$this->config = $this->getConfigFileContents();
 	}
 
-	public function getAuthor()
+	public function getAuthorName()
 	{
-		return $this->config[ 'author' ];
+		return $this->config[ 'author' ][ 'name' ];
 	}
 
-	public function setAuthor( $author )
+	public function getAuthorEmail()
 	{
-		$this->config[ 'author' ] = $author;
+		return $this->config[ 'author' ][ 'email' ];
+	}
+
+	public function setAuthorName( $name )
+	{
+		$this->config[ 'author' ][ 'name' ] = $name;
+
+		return $this;
+	}
+
+	public function setAuthorEmail( $email )
+	{
+		$this->config[ 'author' ][ 'email' ] = $email;
 
 		return $this;
 	}
@@ -85,14 +97,12 @@ class Config {
 			throw new Exception( 'Missing config file' );
 		}
 
-		$config = (array) json_decode( file_get_contents ( $configFile ) );
+		$config = json_decode( file_get_contents ( $configFile ), true );
 
 		if( $config === false )
 		{
 			throw new Exception( 'Config file is corrupt' );
 		}
-
-		$config[ 'templates' ] = (array) $config[ 'templates' ];
 
 		return $config;
 	}

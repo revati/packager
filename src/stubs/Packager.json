@@ -1,5 +1,8 @@
 {
-  "author": "",
+  "author": {
+    "name": "",
+    "email": ""
+  },
   "defaultTemplate": "",
   "templates": []
 }
