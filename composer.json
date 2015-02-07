@@ -1,5 +1,6 @@
 {
   "name": "revati/packager",
+  "version": "0.1",
   "description": "Composer package builder bootstrap",
   "license": "MIT",
   "authors": [
@@ -17,5 +18,11 @@
     "psr-4": {
       "Packager\\": "src/"
     }
-  }
+  },
+  "bin": [
+    "packager"
+  ],
+  "config": {
+    "bin-dir": "bin"
+  },
 }
