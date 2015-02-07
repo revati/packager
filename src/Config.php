@@ -1,5 +1,7 @@
 <?php namespace Packager;
 
+use Exception;
+
 class Config {
 
 	protected $output;
@@ -34,8 +36,7 @@ class Config {
 
 		if( ! $this->hasBootstrap( $name ) )
 		{
-			$this->output->writeln( "<error>Unexisting bootstrap {$name}</error>" );
-			exit( 1 );
+			throw new Exception( 'Unexisting bootstrap ' . $name );
 		}
 
 		return $this->config[ 'bootstraps' ][ $name ];
@@ -72,7 +73,7 @@ class Config {
 
 	protected function path()
 	{
-		return realpath( __DIR__ . '/../config.json' );
+		return realpath( config_path() . DIRECTORY_SEPARATOR . 'Packager.json' );
 	}
 
 	protected function getConfigFileContents()
@@ -81,16 +82,14 @@ class Config {
 
 		if( $configFile === false )
 		{
-			$this->output->writeln( '<error>Config file is missing</error>' );
-			exit( 1 );
+			throw new Exception( 'Missing config file' );
 		}
 
 		$config = (array) json_decode( file_get_contents ( $configFile ) );
 
 		if( $config === false )
 		{
-			$this->output->writeln( '<error>Config file is corrupt</error>' );
-			exit( 1 );
+			throw new Exception( 'Config file is corrupt' );
 		}
 
 		$config[ 'bootstraps' ] = (array) $config[ 'bootstraps' ];

@@ -1,8 +1,8 @@
 <?php namespace Packager;
 
 use Closure;
-use Packager\Config;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -35,14 +35,20 @@ class BaseCommand extends Command {
 	 */
 	protected $fs;
 
+	protected $excludeConfig = false;
+
 	protected function execute( InputInterface $input, OutputInterface $output )
 	{
 		$this->input  = $input;
 		$this->output = $output;
 
-		$this->config = new Config( $output );
 		$this->finder = new Finder();
-		$this->fs = new Filesystem();
+		$this->fs     = new Filesystem();
+
+		if( ! $this->excludeConfig )
+		{
+			$this->config = new Config( $output );
+		}
 	}
 
 	protected function ask( $message, Closure $validation = null )
@@ -61,7 +67,7 @@ class BaseCommand extends Command {
 
 	protected function writeInfo( $message )
 	{
-		$this->write( $message, 'info' );
+		$this->write( '✔ ' . $message, 'info' );
 	}
 
 	protected function writeQuestion( $message )
@@ -87,5 +93,14 @@ class BaseCommand extends Command {
 	protected function isAbsolutePath( $path )
 	{
 		return $this->fs->isAbsolutePath( $path );
+	}
+
+	protected function call( $command, $arguments = [ ] )
+	{
+		$command = $this->getApplication()->find( $command );
+
+		$arguments[ 'command' ] = $command;
+
+		return $command->run( new ArrayInput( $arguments ), $this->output );
 	}
 }

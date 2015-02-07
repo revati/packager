@@ -2,12 +2,8 @@
 
 <?php
 
-use Packager\Commands\Bootstrap\FetchBootstrapConfigCommand;
-use Packager\Commands\Bootstrap\MakeBootstrapConfigCommand;
-use Packager\Commands\Bootstrap\ShowBootstrapsListCommand;
 use Packager\InitPackagerCommand;
-use Packager\Commands\NewPackageCommand;
-use Packager\Commands\SetupCommand;
+use Packager\SetAuthorCommand;
 use Symfony\Component\Console\Application;
 
 $_ENV[ 'HOME' ] = getenv( 'HOME' );
@@ -42,6 +38,7 @@ function cache_path()
 $app = new Application( "Package development wrapper", "0.0" );
 
 $app->add( new InitPackagerCommand() );
+$app->add( new SetAuthorCommand() );
 //$app->add( new SetupCommand() );
 //$app->add( new NewPackageCommand() );
 //$app->add( new FetchBootstrapConfigCommand() );

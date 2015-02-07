@@ -6,6 +6,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InitPackagerCommand extends BaseCommand {
 
+	protected $excludeConfig = true;
+
 	/**
 	 * Configure the command options.
 	 *
@@ -43,5 +45,7 @@ class InitPackagerCommand extends BaseCommand {
 		copy( __DIR__ . '/stubs/Packager.json', config_path() . '/Packager.json' );
 
 		$this->writeInfo( 'Packager config stub created at: ' . config_path() );
+
+		$this->call( 'author' );
 	}
 }
