@@ -1,6 +1,6 @@
-<?php namespace Packager\Commands\Bootstrap;
+<?php namespace Packager;
 
-use Packager\Commands\BaseCommand;
+use Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -9,12 +9,13 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class MakeBootstrapConfigCommand extends BaseCommand {
 
-	protected $newConfig = [
-		'name' => '',
-		'description' => '',
-		'files' => [],
-		'folders' => [],
-	];
+	protected $newConfig
+		                   = [
+			'name'        => '',
+			'description' => '',
+			'files'       => [ ],
+			'folders'     => [ ],
+		];
 
 	protected $ignorePaths = [ "vendor", ".git" ];
 
@@ -24,13 +25,13 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 		     ->setDescription( 'Make package bootstrap config file from folder' )
 		     ->addArgument( 'name', InputArgument::REQUIRED, 'Bootstrap name' )
 		     ->addArgument( 'source', InputArgument::OPTIONAL, 'Bootstrap source' )
-			->addOption( 'description', 'd', InputOption::VALUE_OPTIONAL, 'Bootstrap description' )
+		     ->addOption( 'description', 'd', InputOption::VALUE_OPTIONAL, 'Bootstrap description' )
 		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages bootstrap if exists' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
-		$this->prepare( $input, $output );
+		parent::execute( $input, $output );
 
 		$name = $this->input->getArgument( 'name' );
 
@@ -40,8 +41,7 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 			! $input->getOption( 'force' )
 		)
 		{
-			$this->writeError( 'Bootstrap already exists!' );
-			exit( 1 );
+			throw new Exception( 'Bootstrap already exists!' );
 		}
 
 		$this->prepareConfig( $this->fetchDirectory() );
@@ -50,12 +50,12 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 
 		$this->config->setBootstrap( $name, $this->getBootstrapPath() )->save();
 
-		$this->writeInfo("Bootstrap config generated as '{$name}'");
+		$this->writeInfo( "Bootstrap config generated as '{$name}'" );
 	}
 
 	protected function prepareConfig( $directory )
 	{
-		$this->newConfig[ 'name' ] = $this->input->getArgument( 'name' );
+		$this->newConfig[ 'name' ]        = $this->input->getArgument( 'name' );
 		$this->newConfig[ 'description' ] = $this->input->getOption( 'description' );
 
 		$files = $this->finder
@@ -78,7 +78,7 @@ class MakeBootstrapConfigCommand extends BaseCommand {
 	{
 		$name = $this->input->getArgument( 'name' ) . '.json';
 
-		return realpath( __DIR__ . '/../../../bootstraps' ) . '/' . $name;
+		return cache_path() . DIRECTORY_SEPARATOR . $name;
 	}
 
 	protected function prepareFile( SplFileInfo $file )

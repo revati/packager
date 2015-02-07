@@ -3,6 +3,7 @@
 <?php
 
 use Packager\InitPackagerCommand;
+use Packager\MakeBootstrapConfigCommand;
 use Packager\SetAuthorCommand;
 use Packager\ShowBootstrapsListCommand;
 use Symfony\Component\Console\Application;
@@ -43,7 +44,7 @@ $app->add( new SetAuthorCommand() );
 //$app->add( new SetupCommand() );
 //$app->add( new NewPackageCommand() );
 //$app->add( new FetchBootstrapConfigCommand() );
-//$app->add( new MakeBootstrapConfigCommand() );
+$app->add( new MakeBootstrapConfigCommand() );
 $app->add( new ShowBootstrapsListCommand() );
 
 
