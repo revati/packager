@@ -50,7 +50,14 @@ All variables are prefixed and suffixed with two underscores (that's why they ar
 
 ## TODO
 
-- Figure out a way to share template config files.
+- [ ] Figure out a way to share template config files. 
+	- `template:share template-name` command to upload template config file somewhere?
+- [ ] Ability to run some custom scripts (git init, composer install...) after package is initialized
+- [ ] Ability to initialize package in per template predefined custom subdirectory. 
+	- runing package initialization from project root, but create package under ./packages directory.
+- [ ] Ability to create raw template from config file, for templte editing purposes.
+- [ ] Ability to pull composer packages, but not in vendor directory, but as main package, for editing purposes.
+
 
 ## Simple example
 
