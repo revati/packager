@@ -4,6 +4,7 @@
 
 use Packager\FetchTemplateConfigCommand;
 use Packager\InitPackagerCommand;
+use Packager\EditTemplateCommand;
 use Packager\MakeTemplateConfigCommand;
 use Packager\NewPackageCommand;
 use Packager\SetAuthorCommand;
@@ -47,6 +48,7 @@ $app->add( new NewPackageCommand() );
 $app->add( new FetchTemplateConfigCommand() );
 $app->add( new MakeTemplateConfigCommand() );
 $app->add( new ShowTemplatesListCommand() );
+$app->add( new EditTemplateCommand() );
 
 
 $app->run();
