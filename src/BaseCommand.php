@@ -116,6 +116,6 @@ class BaseCommand extends Command {
 			return $path;
 		}
 
-		return getcwd() . '/' . $pathy;
+		return getcwd() . '/' . $path;
 	}
 }
