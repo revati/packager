@@ -104,7 +104,7 @@ It will create `simple-package` directory. It will contain `composer.json` file 
 	    "psr-4": {
 	      "Revati\\SimplePackage\\": "src/"
 	    }
-	  },
+	  }
 	}
 
 There also will be `src` folder with `SimplePackageClass.php` file. And its content will be:
