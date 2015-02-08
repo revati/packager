@@ -8,6 +8,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InitCommand extends Command {
 
+	/**
+	 * Configure the command options.
+	 *
+	 * @return void
+	 */
 	public function configure()
 	{
 		$this->setName( 'template:init' )
@@ -15,6 +20,15 @@ class InitCommand extends Command {
 		     ->addArgument( 'name', InputArgument::REQUIRED, 'Template name' );
 	}
 
+	/**
+	 * Executes the current command.
+	 *
+	 * @param \Symfony\Component\Console\Input\InputInterface   $input
+	 * @param \Symfony\Component\Console\Output\OutputInterface $output
+	 *
+	 * @throws \Exception
+	 * @return void
+	 */
 	public function execute( InputInterface $input, OutputInterface $output )
 	{
 		$templateName = $input->getArgument( 'name' );
@@ -33,5 +47,4 @@ class InitCommand extends Command {
 
 		$output->writeln( '<info>✔ Template initialized</info>' );
 	}
-
 }

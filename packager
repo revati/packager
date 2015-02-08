@@ -2,18 +2,9 @@
 
 <?php
 
-use Packager\FetchTemplateConfigCommand;
-use Packager\InitPackagerCommand;
-use Packager\EditTemplateCommand;
-use Packager\MakeTemplateConfigCommand;
-use Packager\NewPackageCommand;
-use Packager\SetAuthorCommand;
-use Packager\ShowTemplatesListCommand;
-use Revati\Packager\Template\InitCommand;
+use Revati\Packager\InitCommand as InitPackagerCommand;
+use Revati\Packager\Template\InitCommand as InitTemplateCommand;
 use Symfony\Component\Console\Application;
-
-$_ENV[ 'HOME' ] = getenv( 'HOME' );
-$_ENV[ 'PACKAGER_DOTFILE_PATH' ] = config_path() . DIRECTORY_SEPARATOR . '.config';
 
 if( file_exists( __DIR__ . '/vendor/autoload.php' ) )
 {
@@ -24,32 +15,9 @@ else
 	require __DIR__ . '/../../autoload.php';
 }
 
-function config_path()
-{
-	if( isset( $_SERVER[ 'HOME' ] ) )
-	{
-		return $_SERVER[ 'HOME' ] . '/.Packager';
-	}
-	else
-	{
-		return $_SERVER[ 'HOMEDRIVE' ] . $_SERVER[ 'HOMEPATH' ] . DIRECTORY_SEPARATOR . '.Packager';
-	}
-}
-
-function cache_path()
-{
-	return config_path() . DIRECTORY_SEPARATOR . 'templates';
-}
-
 $app = new Application( "Package development wrapper", "0.0" );
 
-//$app->add( new InitPackagerCommand() );
-//$app->add( new SetAuthorCommand() );
-//$app->add( new NewPackageCommand() );
-//$app->add( new FetchTemplateConfigCommand() );
-//$app->add( new MakeTemplateConfigCommand() );
-//$app->add( new ShowTemplatesListCommand() );
-//$app->add( new EditTemplateCommand() );
-$app->add( new InitCommand() );
+$app->add( new InitTemplateCommand() );
+$app->add( new InitPackagerCommand() );
 
 $app->run();
