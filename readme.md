@@ -31,7 +31,9 @@ Now to use this template you can run
 
 	packager new my-awesome-package template-name
 
-It will initialize package in `my-awesome-package` directory. 
+It will initialize package in `my-awesome-package` directory.
+
+See [Simple example](#simple-example) for more detailed info.
 
 ### Variables
 
@@ -49,3 +51,69 @@ All variables are prefixed and suffixed with two underscores (that's why they ar
 ## TODO
 
 - Figure out a way to share template config files.
+
+## Simple example
+
+Create new directory. With in it create new composer.json file.
+
+	{
+	  "name": "__author_name__/__package_name__",
+	  "description": "__package_description__",
+	  "authors": [
+	    {
+	      "name": "__author_name__",
+	      "email": "__author_email__"
+	    }
+	  ],
+	  "autoload": {
+	    "psr-4": {
+	      "__author_class__\\__package_class__\\": "src/"
+	    }
+	  },
+	}
+
+Lets create `src` directory and with in `__package_class__Class.php` with fallowing content.
+
+	<?php namespace __author_class__\__package_class__;
+	
+	class __package_class__Class extends SomeClass {
+	
+	    // Code
+	}
+
+Now when template is done lets make its configuration file.
+
+	packager template:make simple-template
+
+Template is ready. To use it run 
+
+	packager new simple-package simple-template
+
+It will create `simple-package` directory. It will contain `composer.json` file with fallowing content:
+
+	{
+	  "name": "revati/simple-package",
+	  "description": "",
+	  "authors": [
+	    {
+	      "name": "revati",
+	      "email": "email@email.com"
+	    }
+	  ],
+	  "autoload": {
+	    "psr-4": {
+	      "Revati\\SimplePackage\\": "src/"
+	    }
+	  },
+	}
+
+There also will be `src` folder with `SimplePackageClass.php` file. And its content will be:
+
+	<?php namespace Revati\SimplePackage;
+	
+	class SimplePackageClass extends SomeClass {
+	
+	    // Code
+	}
+
+Hope this example helps. In [Variables](#variables) section you can find all available variables.
