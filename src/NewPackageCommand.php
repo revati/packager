@@ -21,10 +21,13 @@ class NewPackageCommand extends BaseCommand {
 	{
 		parent::execute( $input, $output );
 
-		$packageDirectory = getcwd() . DIRECTORY_SEPARATOR . $input->getArgument( 'name' );
+		$name = $input->getArgument( 'name' );
+		$packageDirectory = getcwd() . DIRECTORY_SEPARATOR . $name;
 		$this->verifyPackageDoesntExist( $packageDirectory );
 
 		$this->initPackage( $packageDirectory, $this->getPackageSource() );
+
+		$this->writeInfo( 'Package initialized: ' . $name );
 	}
 
 	protected function getPackageSource()
