@@ -14,7 +14,8 @@ class FetchTemplateConfigCommand extends BaseCommand {
 		     ->setDescription( 'Fetch package template config file' )
 		     ->addArgument( 'name', InputArgument::REQUIRED, 'Template name' )
 		     ->addArgument( 'source', InputArgument::REQUIRED, 'Template source' )
-		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages template if exists' );
+		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages template if exists' )
+		     ->addOption( 'default', null, InputOption::VALUE_NONE, 'Mark as default template' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
@@ -42,7 +43,14 @@ class FetchTemplateConfigCommand extends BaseCommand {
 
 		$source = $this->verifySource( $source );
 
-		$this->config->setTemplate( $name, $source )->save();
+		$this->config->setTemplate( $name, $source );
+
+		if( $input->getOption( 'default' ) )
+		{
+			$this->config->setDefaultTemplate( $name );
+		}
+
+		$this->config->save();
 
 		$this->writeInfo( $message );
 	}
@@ -61,7 +69,8 @@ class FetchTemplateConfigCommand extends BaseCommand {
 			$this->isUrl( $source )
 			||
 			$this->isFullPath( $source )
-		) {
+		)
+		{
 			return $source;
 		}
 

@@ -9,8 +9,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class MakeTemplateConfigCommand extends BaseCommand {
 
-	protected $newConfig
-		                   = [
+	protected $newConfig = [
 			'name'        => '',
 			'description' => '',
 			'files'       => [ ],
@@ -26,7 +25,8 @@ class MakeTemplateConfigCommand extends BaseCommand {
 		     ->addArgument( 'name', InputArgument::REQUIRED, 'Template name' )
 		     ->addArgument( 'source', InputArgument::OPTIONAL, 'Template source' )
 		     ->addOption( 'description', 'd', InputOption::VALUE_OPTIONAL, 'Template description' )
-		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages template if exists' );
+		     ->addOption( 'force', 'f', InputOption::VALUE_NONE, 'Overwrite existing packages template if exists' )
+		     ->addOption( 'default', null, InputOption::VALUE_NONE, 'Mark as default template' );
 	}
 
 	public function execute( InputInterface $input, OutputInterface $output )
@@ -49,7 +49,14 @@ class MakeTemplateConfigCommand extends BaseCommand {
 
 		$this->saveConfig();
 
-		$this->config->setTemplate( $name, $this->getTemplatePath() )->save();
+		$this->config->setTemplate( $name, $this->getTemplatePath() );
+
+		if( $input->getOption( 'default' ) )
+		{
+			$this->config->setDefaultTemplate( $name );
+		}
+
+		$this->config->save();
 
 		$this->writeInfo( "Template config generated as '{$name}'" );
 	}
