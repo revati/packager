@@ -16,8 +16,11 @@
   },
   "autoload": {
     "psr-4": {
-      "Packager\\": "src/"
-    }
+      "Revati\\Packager\\": "src/"
+    },
+    "files": [
+      "helpers.php"
+    ]
   },
   "bin": [
     "packager"

@@ -9,6 +9,7 @@ use Packager\MakeTemplateConfigCommand;
 use Packager\NewPackageCommand;
 use Packager\SetAuthorCommand;
 use Packager\ShowTemplatesListCommand;
+use Revati\Packager\Template\InitCommand;
 use Symfony\Component\Console\Application;
 
 $_ENV[ 'HOME' ] = getenv( 'HOME' );
@@ -42,13 +43,13 @@ function cache_path()
 
 $app = new Application( "Package development wrapper", "0.0" );
 
-$app->add( new InitPackagerCommand() );
-$app->add( new SetAuthorCommand() );
-$app->add( new NewPackageCommand() );
-$app->add( new FetchTemplateConfigCommand() );
-$app->add( new MakeTemplateConfigCommand() );
-$app->add( new ShowTemplatesListCommand() );
-$app->add( new EditTemplateCommand() );
-
+//$app->add( new InitPackagerCommand() );
+//$app->add( new SetAuthorCommand() );
+//$app->add( new NewPackageCommand() );
+//$app->add( new FetchTemplateConfigCommand() );
+//$app->add( new MakeTemplateConfigCommand() );
+//$app->add( new ShowTemplatesListCommand() );
+//$app->add( new EditTemplateCommand() );
+$app->add( new InitCommand() );
 
 $app->run();

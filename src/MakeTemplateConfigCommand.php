@@ -16,7 +16,7 @@ class MakeTemplateConfigCommand extends BaseCommand {
 			'folders'     => [ ],
 		];
 
-	protected $ignorePaths = [ "vendor", ".git" ];
+	protected $ignorePaths = [ "vendor", ".git", "packager.json" ];
 
 	public function configure()
 	{
@@ -65,6 +65,7 @@ class MakeTemplateConfigCommand extends BaseCommand {
 	{
 		$this->newConfig[ 'name' ]        = $this->input->getArgument( 'name' );
 		$this->newConfig[ 'description' ] = $this->input->getOption( 'description' );
+		$this->newConfig[ 'config' ]      = $this->getPackageConfig( $directory );
 
 		$files = $this->finder
 			->ignoreUnreadableDirs()
@@ -103,5 +104,17 @@ class MakeTemplateConfigCommand extends BaseCommand {
 		$fileContents = file_get_contents( $file->getRealPath() );
 
 		$this->newConfig[ 'files' ][ $filePath ] = $fileContents;
+	}
+
+	protected function getPackageConfig( $directory )
+	{
+		$configFile = file_get_contents( $directory . DIRECTORY_SEPARATOR . 'packager.json' );
+
+		if( empty( $configFile ) )
+		{
+			return [];
+		}
+
+		return json_decode( $configFile, true );
 	}
 }
