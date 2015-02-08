@@ -95,7 +95,7 @@ class MakeTemplateConfigCommand extends BaseCommand {
 
 		if( $file->isDir() )
 		{
-			$this->newConfig[ 'folders' ] = $filePath;
+			$this->newConfig[ 'folders' ][ ] = $filePath;
 
 			return;
 		}
