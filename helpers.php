@@ -95,12 +95,27 @@ function multi_implode( $delimiter, array $array, $removeEmpty = true )
 	return implode( $delimiter, $returnArray );
 }
 
-function get_config( $directory, $content )
+function put_config( $directory, $content )
 {
-	file_put_contents( $directory, json_decode( $content, true ) );
+	file_put_contents( $directory, json_encode( $content, JSON_PRETTY_PRINT ) );
 }
 
-function put_config( $path )
+function get_config( $path )
 {
 	return json_decode( file_get_contents( $path ), true );
+}
+
+function get_global_config()
+{
+	return get_config( local_path( 'packager.json' ) );
+}
+
+function array_get( $key, array $array, $default = null )
+{
+	if( array_key_exists( $key, $array ) )
+	{
+		return $array[ $key ];
+	}
+
+	return $default;
 }

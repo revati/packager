@@ -43,8 +43,36 @@ class InitCommand extends Command {
 
 		mkdir( $templatePath );
 
-		copy( stub_path( 'local-config.json' ), make_path( $templatePath, 'packager.json' ) );
+		$templateConfigPath = make_path( $templatePath, 'packager.json' );
+
+		copy( stub_path( 'local-config.json' ), $templateConfigPath );
+
+		$this->saveTemplateConfig( $templateConfigPath );
 
 		$output->writeln( '<info>✔ Template initialized</info>' );
+	}
+
+	/**
+	 * Add global config to template config
+	 *
+	 * @param $templateConfigPath
+	 */
+	protected function saveTemplateConfig( $templateConfigPath )
+	{
+		$globalConfig = get_global_config();
+
+		if( empty( $globalConfig[ 'author' ] ) )
+		{
+			return;
+		}
+
+		$templateConfig = get_config( $templateConfigPath );
+
+		$templateConfig[ 'authors' ][ ] = [
+			'name'  => array_get( 'name', $globalConfig[ 'author' ] ),
+			'email' => array_get( 'email', $globalConfig[ 'author' ] ),
+		];
+
+		put_config( $templateConfigPath, $templateConfig );
 	}
 }

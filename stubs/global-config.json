@@ -1,10 +1,5 @@
 {
-  "name": "",
-  "description": "",
-  "authors": [
-    {
-      "name": ""
-    }
-  ],
-  "scripts": []
+  "defaultTemplate": "",
+  "templates": [],
+  "author": []
 }
