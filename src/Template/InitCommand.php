@@ -46,6 +46,8 @@ class InitCommand extends Command {
 	 */
 	protected function execute( InputInterface $input, OutputInterface $output )
 	{
+		$this->comment( 'Creating template...' );
+
 		$name = $this->argument( 'name' );
 		$path = current_path( $name );
 
@@ -53,8 +55,6 @@ class InitCommand extends Command {
 		{
 			throw new Exception( 'Folder is taken' );
 		}
-
-		$this->comment( 'Creating template...' );
 
 		mkdir( $path );
 
@@ -72,17 +72,16 @@ class InitCommand extends Command {
 	 */
 	protected function saveTemplateConfig( $path )
 	{
-		$globalConfig   = get_global_config();
 		$templateConfig = get_config( stub_path( 'local-config.json' ) );
 
 		$templateConfig[ 'name' ]        = $this->argument( 'name' );
 		$templateConfig[ 'description' ] = $this->argument( 'description' );
 
-		if( ! empty( $globalConfig[ 'author' ] ) )
+		if( ! empty( $this->getConfig( 'author' ) ) )
 		{
 			$templateConfig[ 'authors' ][ ] = [
-				'name'  => array_get( 'name', $globalConfig[ 'author' ] ),
-				'email' => array_get( 'email', $globalConfig[ 'author' ] ),
+				'name'  => $this->getConfig( 'author.name' ),
+				'email' => $this->getConfig( 'author.email' ),
 			];
 		}
 

@@ -120,11 +120,23 @@ function get_global_config()
 	return get_config( local_path( 'packager.json' ) );
 }
 
-function array_get( $key, array $array, $default = null )
+function put_global_config( $content )
 {
-	if( array_key_exists( $key, $array ) )
+	put_config( local_path( 'packager.json' ), $content );
+}
+
+function array_get( array $array, $key, $default = null )
+{
+	if( ! is_array( $key ) )
 	{
-		return $array[ $key ];
+		$key = (array) explode( '.', $key );
+	}
+	foreach( $key as $part )
+	{
+		if( array_key_exists( $part, $array ) )
+		{
+			return array_get( $array, $part, $default );
+		}
 	}
 
 	return $default;

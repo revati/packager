@@ -44,6 +44,13 @@ class Command extends BaseCommand {
 	protected $description;
 
 	/**
+	 * Global packager configuration
+	 *
+	 * @type array
+	 */
+	protected $config;
+
+	/**
 	 * Create a new console command instance.
 	 */
 	public function __construct()
@@ -329,6 +336,26 @@ class Command extends BaseCommand {
 	public function getOutput()
 	{
 		return $this->output;
+	}
+
+	protected function getConfig( $key = null )
+	{
+		if( ! $this->config )
+		{
+			$this->config = get_global_config();
+		}
+
+		if( $key )
+		{
+			return array_get( $this->config, $key );
+		}
+
+		return $this->config;
+	}
+
+	protected function saveConfig()
+	{
+		put_global_config( $this->getConfig() );
 	}
 
 }
