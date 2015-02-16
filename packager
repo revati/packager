@@ -2,7 +2,6 @@
 
 <?php
 
-use Revati\Packager\InitCommand as InitPackagerCommand;
 use Revati\Packager\Template\InitCommand as InitTemplateCommand;
 use Symfony\Component\Console\Application;
 
@@ -18,6 +17,7 @@ else
 $app = new Application( "Package development wrapper", "0.0" );
 
 $app->add( new InitTemplateCommand() );
-$app->add( new InitPackagerCommand() );
+//$app->add( new SaveTemplateCommand() );
+//$app->add( new InitPackagerCommand() );
 
 $app->run();

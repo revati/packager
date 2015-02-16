@@ -95,14 +95,24 @@ function multi_implode( $delimiter, array $array, $removeEmpty = true )
 	return implode( $delimiter, $returnArray );
 }
 
-function put_config( $directory, $content )
+function put_config( $path, $content )
 {
-	file_put_contents( $directory, json_encode( $content, JSON_PRETTY_PRINT ) );
+	file_put_contents( $path, json_encode( $content, JSON_PRETTY_PRINT ) );
 }
 
-function get_config( $path )
+function get_config( $path, $required = true )
 {
-	return json_decode( file_get_contents( $path ), true );
+	if( is_file( $path ) )
+	{
+		return json_decode( file_get_contents( $path ), true );
+	}
+
+	if( $required )
+	{
+		throw new Exception( "Missing config file: $path" );
+	}
+
+	return false;
 }
 
 function get_global_config()

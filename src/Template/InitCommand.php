@@ -1,7 +1,7 @@
 <?php namespace Revati\Packager\Template;
 
 use Exception;
-use Symfony\Component\Console\Command\Command;
+use Revati\Packager\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,15 +9,30 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InitCommand extends Command {
 
 	/**
-	 * Configure the command options.
+	 * The console command name.
 	 *
-	 * @return void
+	 * @var string
 	 */
-	public function configure()
+	protected $name = 'template:init';
+
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = 'Initialize template';
+
+	/**
+	 * Get the console command arguments.
+	 *
+	 * @return array
+	 */
+	protected function getArguments()
 	{
-		$this->setName( 'template:init' )
-		     ->setDescription( 'Initialize template' )
-		     ->addArgument( 'name', InputArgument::REQUIRED, 'Template name' );
+		return [
+			[ 'name', InputArgument::REQUIRED, 'Template name' ],
+			[ 'description', InputArgument::OPTIONAL, 'Template description' ],
+		];
 	}
 
 	/**
@@ -29,50 +44,48 @@ class InitCommand extends Command {
 	 * @throws \Exception
 	 * @return void
 	 */
-	public function execute( InputInterface $input, OutputInterface $output )
+	protected function execute( InputInterface $input, OutputInterface $output )
 	{
-		$templateName = $input->getArgument( 'name' );
-		$templatePath = current_path( $templateName );
+		$name = $this->argument( 'name' );
+		$path = current_path( $name );
 
-		if( is_dir( $templatePath ) )
+		if( is_dir( $path ) )
 		{
 			throw new Exception( 'Folder is taken' );
 		}
 
-		$output->writeln( '<comment>Creating template...</comment>' );
+		$this->comment( 'Creating template...' );
 
-		mkdir( $templatePath );
+		mkdir( $path );
 
-		$templateConfigPath = make_path( $templatePath, 'packager.json' );
+		$this->saveTemplateConfig( $path );
 
-		copy( stub_path( 'local-config.json' ), $templateConfigPath );
-
-		$this->saveTemplateConfig( $templateConfigPath );
-
-		$output->writeln( '<info>✔ Template initialized</info>' );
+		$this->info( "✔ Template '$name' created" );
 	}
 
 	/**
 	 * Add global config to template config
 	 *
-	 * @param $templateConfigPath
+	 * @param $path
+	 *
+	 * @throws \Exception
 	 */
-	protected function saveTemplateConfig( $templateConfigPath )
+	protected function saveTemplateConfig( $path )
 	{
-		$globalConfig = get_global_config();
+		$globalConfig   = get_global_config();
+		$templateConfig = get_config( stub_path( 'local-config.json' ) );
 
-		if( empty( $globalConfig[ 'author' ] ) )
+		$templateConfig[ 'name' ]        = $this->argument( 'name' );
+		$templateConfig[ 'description' ] = $this->argument( 'description' );
+
+		if( ! empty( $globalConfig[ 'author' ] ) )
 		{
-			return;
+			$templateConfig[ 'authors' ][ ] = [
+				'name'  => array_get( 'name', $globalConfig[ 'author' ] ),
+				'email' => array_get( 'email', $globalConfig[ 'author' ] ),
+			];
 		}
 
-		$templateConfig = get_config( $templateConfigPath );
-
-		$templateConfig[ 'authors' ][ ] = [
-			'name'  => array_get( 'name', $globalConfig[ 'author' ] ),
-			'email' => array_get( 'email', $globalConfig[ 'author' ] ),
-		];
-
-		put_config( $templateConfigPath, $templateConfig );
+		put_config( make_path( $path, 'packager.json' ), $templateConfig );
 	}
 }
