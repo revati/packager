@@ -30,7 +30,7 @@ class InitCommand extends Command {
 	protected function getArguments()
 	{
 		return [
-			[ 'name', InputArgument::REQUIRED, 'Template name' ],
+			[ 'name', InputArgument::OPTIONAL, 'Template name' ],
 			[ 'description', InputArgument::OPTIONAL, 'Template description' ],
 		];
 	}
@@ -51,16 +51,44 @@ class InitCommand extends Command {
 		$name = $this->argument( 'name' );
 		$path = current_path( $name );
 
-		if( is_dir( $path ) )
+		if(
+			is_dir( $path )
+			&&
+			! empty( $name )
+		)
 		{
 			throw new Exception( 'Folder is taken' );
 		}
 
-		mkdir( $path );
+		if(
+			empty( $name )
+			&&
+		    get_config( make_path( $path, 'packager.json' ), false )
+		)
+		{
+			throw new Exception( 'Packager is initialized' );
+		}
+
+		if( ! empty( $name ) )
+		{
+			mkdir( $path );
+		}
 
 		$this->saveTemplateConfig( $path );
 
-		$this->info( "✔ Template '$name' created" );
+		$this->info( "✔ Template created" );
+	}
+
+	protected function isCurrentDirectory()
+	{
+		return empty( $this->argument( 'name' ) );
+	}
+
+	protected function isPackagerInitialized()
+	{
+		$path = current_path( $this->argument( 'name' ) );
+
+		return file_exists( make_path( $path, 'packager.json' ) );
 	}
 
 	/**
