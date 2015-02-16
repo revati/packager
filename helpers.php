@@ -127,17 +127,25 @@ function put_global_config( $content )
 
 function array_get( array $array, $key, $default = null )
 {
-	if( ! is_array( $key ) )
+	if( is_null( $key ) )
 	{
-		$key = (array) explode( '.', $key );
-	}
-	foreach( $key as $part )
-	{
-		if( array_key_exists( $part, $array ) )
-		{
-			return array_get( $array, $part, $default );
-		}
+		return $array;
 	}
 
-	return $default;
+	if( isset( $array[ $key ] ) )
+	{
+		return $array[ $key ];
+	}
+
+	foreach( explode( '.', $key ) as $segment )
+	{
+		if( ! is_array( $array ) || ! array_key_exists( $segment, $array ) )
+		{
+			return $default;
+		}
+
+		$array = $array[ $segment ];
+	}
+
+	return $array;
 }
