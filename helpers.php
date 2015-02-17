@@ -149,3 +149,17 @@ function array_get( array $array, $key, $default = null )
 
 	return $array;
 }
+
+function starts_with( $haystack, $needles )
+{
+	foreach( (array) $needles as $needle )
+	{
+		if( $needle != '' && strpos( $haystack, $needle ) === 0 )
+		{
+			return true;
+		}
+	}
+
+	return false;
+
+}

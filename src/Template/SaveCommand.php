@@ -70,6 +70,11 @@ class SaveCommand extends Command {
 	{
 		$name = $this->getLocalConfig( 'name' );
 
+		if( empty( $name ) )
+		{
+			throw new Exception( 'Template configuration does not have name' );
+		}
+
 		if(
 			$this->getConfig( "templates.$name" )
 			&&
@@ -122,28 +127,51 @@ class SaveCommand extends Command {
 
 	protected function readDirectory()
 	{
-		$excludePaths = [ current_path() ];
+		$excludePaths = $this->getExclduePaths();
 
 		$folders = [ ];
 		$files   = [ ];
 
 		foreach( new RecursiveIteratorIterator( new RecursiveDirectoryIterator( current_path() ) ) as $file )
 		{
-			if( in_array( $file->getPath(), $excludePaths ) )
+			if(
+				$file->getPath() === current_path()
+				||
+				starts_with( $file->getPath(), $excludePaths )
+			)
+			{
+				continue;
+			}
+
+			$localPath = trim( strtr( $file->getRealPath(), [ current_path() => '' ] ), '/' );
+
+			if( empty( $localPath ) )
 			{
 				continue;
 			}
 
 			if( $file->isDir() )
 			{
-				$folders[ $file->getPath() ] = '';
+				$folders[ $localPath ] = '';
 
 				continue;
 			}
 
-			$files[ $file->getRealPath() ] = file_get_contents( $file->getRealPath() );
+			$files[ $localPath ] = file_get_contents( $file->getRealPath() );
 		}
 
 		return [ array_keys( $folders ), $files ];
+	}
+
+	protected function getExclduePaths()
+	{
+		$excludes = [ ];
+
+		foreach( $this->getLocalConfig( 'excludes' ) as $exclude )
+		{
+			$excludes[ ] = current_path( $exclude );
+		}
+
+		return $excludes;
 	}
 }
