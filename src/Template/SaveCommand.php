@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SaveCommand extends Command {
 
-
 	/**
 	 * Template configuration
 	 *
